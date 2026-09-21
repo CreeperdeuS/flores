@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Tulipanes Amarillos? ✨</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Playfair Display & Great Vibes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400..800;1,400..800&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        .font-serif-romantic {
+            font-family: 'Playfair Display', Georgia, serif;
+        }
+        .font-cursive {
+            font-family: 'Great Vibes', cursive;
+        }
+        .font-sans-clean {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(2deg); }
+        }
+
+        @keyframes sway {
+            0%, 100% { transform: rotate(-2.5deg); }
+            50% { transform: rotate(2.5deg); }
+        }
+
+        @keyframes fireflyPulse {
+            0%, 100% { opacity: 0.2; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.3); }
+        }
+
+        @keyframes sparkParticle {
+            0% { opacity: 1; transform: translate(0, 0) scale(1) rotate(0deg); }
+            100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0) rotate(360deg); }
+        }
+
+        @keyframes heartFloat {
+            0% { opacity: 1; transform: translate(0, 0) scale(0.6); }
+            100% { opacity: 0; transform: translate(var(--hdx), var(--hdy)) scale(1.4); }
+        }
+
+        .sky-night {
+            background: linear-gradient(to bottom, #070a13 0%, #0f172a 45%, #1e1b4b 100%);
+        }
+
+        .sky-pink-night {
+            background: linear-gradient(to bottom, #110915 0%, #2a0825 45%, #4c0519 100%);
+        }
+
+        .color-transition {
+            transition: fill 2.5s cubic-bezier(0.4, 0, 0.2, 1), stroke 2.5s cubic-bezier(0.4, 0, 0.2, 1), filter 2.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .tulip-sway {
+            animation: sway 5s ease-in-out infinite;
+            transform-origin: bottom center;
+        }
+
+        .firefly {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: fireflyPulse 3s ease-in-out infinite alternate;
+        }
+
+        .sparkle-particle {
+            position: absolute;
+            pointer-events: none;
+            border-radius: 50%;
+            animation: sparkParticle 1.8s forwards cubic-bezier(0.1, 0.8, 0.3, 1);
+        }
+
+        .floating-heart {
+            position: absolute;
+            pointer-events: none;
+            animation: heartFloat 2.2s forwards cubic-bezier(0.1, 0.8, 0.3, 1);
+        }
+
+        /* Glassmorphism effects */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+    </style>
+</head>
+<body class="m-0 p-0 overflow-hidden select-none font-sans-clean h-screen w-screen relative bg-slate-950 text-white">
+
+    <div id="skyBg" class="sky-night absolute inset-0 w-full h-full transition-all duration-1000 ease-in-out">
+        <!-- Celestial Moon/Glow -->
+        <div id="celestial" class="absolute top-8 right-8 md:top-14 md:right-20 w-24 h-24 md:w-32 md:h-32 rounded-full bg-amber-100/90 shadow-[0_0_70px_rgba(254,240,138,0.4)] transition-all duration-1000 ease-in-out"></div>
+        
+        <!-- Stars layer -->
+        <div id="starsContainer" class="absolute inset-0 opacity-80 transition-opacity duration-1000"></div>
+
+        <!-- Floating Particles/Fireflies Layer -->
+        <div id="firefliesContainer" class="absolute inset-0 pointer-events-none z-10"></div>
+    </div>
+
+    <div class="absolute top-10 md:top-14 left-1/2 transform -translate-x-1/2 z-40 w-[90%] max-w-xl text-center">
+        <div class="glass-panel p-6 md:p-8 rounded-3xl shadow-2xl flex flex-col items-center border border-amber-200/20 transition-all duration-700 hover:border-pink-300/30">
+            
+            <span id="subtitleBadge" class="text-xs uppercase tracking-[0.3em] font-medium text-amber-300/90 mb-2 transition-all duration-700">
+                Una sorpresa para ti
+            </span>
+
+            <h1 id="mainTitle" class="font-serif-romantic text-2xl md:text-3xl lg:text-4xl text-amber-100 font-semibold leading-snug transition-all duration-700 min-h-[4rem] flex items-center justify-center">
+                ¿De verdad pensaste que te regalaría tulipanes amarillos?
+            </h1>
+
+            <p id="secondaryText" class="font-cursive text-3xl md:text-4xl text-amber-200/90 mt-2 opacity-0 transform translate-y-3 transition-all duration-700 h-0 overflow-hidden">
+                ¡Los mejores para ti siempre serán los rosas! 🌸✨
+            </p>
+
+            <div class="mt-6 flex flex-wrap justify-center gap-4">
+                <button id="transformBtn" class="group relative px-7 py-3.5 rounded-full font-medium text-slate-950 bg-gradient-to-r from-amber-300 via-amber-400 to-yellow-500 hover:from-amber-200 hover:to-yellow-400 shadow-[0_0_25px_rgba(250,204,21,0.4)] active:scale-95 transition-all duration-300 flex items-center gap-3 cursor-pointer">
+                    <i id="btnIcon" class="fa-solid fa-wand-magic-sparkles text-slate-900 group-hover:rotate-12 transition-transform"></i>
+                    <span id="btnText" class="tracking-wide">Descúbrelo aquí</span>
+                </button>
+
+                <button id="audioToggleBtn" class="px-4 py-3.5 rounded-full glass-panel text-amber-200 hover:text-white hover:bg-slate-800/80 transition-all duration-300 flex items-center justify-center" title="Activar Sonido">
+                    <i id="audioIcon" class="fa-solid fa-volume-xmark"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="absolute bottom-0 left-0 w-full h-[60%] pointer-events-none z-20">
+        <!-- Distant Hills SVG -->
+        <svg class="absolute bottom-0 w-full h-full" viewBox="0 0 1440 320" preserveAspectRatio="none">
+            <path id="hill2" class="color-transition" fill="#064e3b" fill-opacity="0.6" d="M0,192L60,181.3C120,171,240,150,360,165.3C480,181,600,235,720,229.3C840,224,960,160,1080,138.7C1200,117,1320,139,1380,150L1440,160L1440,320L0,320Z"></path>
+            <path id="hill1" class="color-transition" fill="#022c22" fill-opacity="0.9" d="M0,224L80,213.3C160,203,320,181,480,197.3C640,213,800,267,960,256C1120,245,1280,171,1360,133.3L1440,96L1440,320L0,320Z"></path>
+        </svg>
+
+        <!-- Canvas for animated interactive grass -->
+        <canvas id="grassCanvas" class="absolute bottom-0 left-0 w-full h-full"></canvas>
+    </div>
+
+    <div id="tulipField" class="absolute bottom-[6%] left-0 w-full h-[52%] flex justify-center items-end px-2 md:px-8 gap-1 sm:gap-4 md:gap-8 z-30 pointer-events-auto">
+        <!-- Tulips generated by JS -->
+    </div>
+
+    <!-- Footer hint -->
+    <div class="absolute bottom-3 left-1/2 transform -translate-x-1/2 z-40 text-xs md:text-sm text-slate-300/70 bg-slate-950/40 backdrop-blur-md px-4 py-1.5 rounded-full pointer-events-none border border-white/5">
+        Haz clic en las flores o en el botón para ver la magia ✨
+    </div>
+
+    <script>
+        // State variables
+        let isPink = false;
+        let audioEnabled = false;
+
+        // DOM Elements
+        const skyBg = document.getElementById('skyBg');
+        const celestial = document.getElementById('celestial');
+        const starsContainer = document.getElementById('starsContainer');
+        const firefliesContainer = document.getElementById('firefliesContainer');
+        const tulipField = document.getElementById('tulipField');
+        const transformBtn = document.getElementById('transformBtn');
+        const btnText = document.getElementById('btnText');
+        const btnIcon = document.getElementById('btnIcon');
+        const mainTitle = document.getElementById('mainTitle');
+        const secondaryText = document.getElementById('secondaryText');
+        const subtitleBadge = document.getElementById('subtitleBadge');
+        const audioToggleBtn = document.getElementById('audioToggleBtn');
+        const audioIcon = document.getElementById('audioIcon');
+
+        // Color definitions for yellow and pink tulip palettes
+        const YELLOW_PALETTE = {
+            petalMain1: '#facc15',
+            petalMain2: '#eab308',
+            petalHighlight: '#fef08a',
+            glow: 'rgba(250, 204, 21, 0.4)',
+            firefly: '#fef08a'
+        };
+
+        const PINK_PALETTE = {
+            petalMain1: '#ec4899',
+            petalMain2: '#db2777',
+            petalHighlight: '#fbcfe8',
+            glow: 'rgba(236, 72, 153, 0.5)',
+            firefly: '#f472b6'
+        };
+
+        // Web Audio API Sound Synthesizer (No external audio files needed)
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function playChimeSound(isPinkSound) {
+            if (!audioEnabled || !audioCtx) return;
+
+            const now = audioCtx.currentTime;
+            const notes = isPinkSound ? [523.25, 659.25, 783.99, 1046.50] : [392.00, 493.88, 587.33, 783.99]; // C Major / G Major Arpeggio
+
+            notes.forEach((freq, index) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, now + index * 0.12);
+
+                gain.gain.setValueAtTime(0, now + index * 0.12);
+                gain.gain.linearRampToValueAtTime(0.15, now + index * 0.12 + 0.05);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + index * 0.12 + 1.2);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start(now + index * 0.12);
+                osc.stop(now + index * 0.12 + 1.3);
+            });
+        }
+
+        function createStars() {
+            starsContainer.innerHTML = '';
+            const count = 90;
+            for (let i = 0; i < count; i++) {
+                const star = document.createElement('div');
+                star.className = 'absolute rounded-full bg-white';
+                const size = Math.random() * 2.2 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.top = `${Math.random() * 65}%`;
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.opacity = Math.random() * 0.8 + 0.2;
+                starsContainer.appendChild(star);
+            }
+        }
+
+        function createFireflies() {
+            firefliesContainer.innerHTML = '';
+            const count = 28;
+            for (let i = 0; i < count; i++) {
+                const firefly = document.createElement('div');
+                firefly.className = 'firefly color-transition';
+                const size = Math.random() * 4 + 3;
+                firefly.style.width = `${size}px`;
+                firefly.style.height = `${size}px`;
+                firefly.style.backgroundColor = isPink ? PINK_PALETTE.firefly : YELLOW_PALETTE.firefly;
+                firefly.style.boxShadow = `0 0 12px ${isPink ? PINK_PALETTE.firefly : YELLOW_PALETTE.firefly}`;
+                firefly.style.top = `${Math.random() * 70 + 15}%`;
+                firefly.style.left = `${Math.random() * 96 + 2}%`;
+                firefly.style.animationDuration = `${Math.random() * 3 + 2}s`;
+                firefly.style.animationDelay = `${Math.random() * 2}s`;
+                firefliesContainer.appendChild(firefly);
+            }
+        }
+
+        function createTulipSVG(id, scale = 1, isPinkState = false, delay = 0) {
+            const palette = isPinkState ? PINK_PALETTE : YELLOW_PALETTE;
+            const wrapper = document.createElement('div');
+            wrapper.className = `tulip-wrapper relative flex flex-col items-center cursor-pointer group transition-all duration-500`;
+            wrapper.style.transform = `scale(${scale})`;
+            wrapper.dataset.id = id;
+            wrapper.dataset.pink = isPinkState ? 'true' : 'false';
+
+            wrapper.innerHTML = `
+                <div class="tulip-head relative w-24 h-28 sm:w-28 sm:h-32 md:w-32 md:h-36 tulip-sway" style="animation-delay: ${delay}s">
+                    <svg viewBox="0 0 100 120" class="w-full h-full drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)] overflow-visible">
+                        <defs>
+                            <linearGradient id="petalMain-${id}" x1="0%" y1="100%" x2="0%" y2="0%">
+                                <stop offset="0%" class="stop-1 color-transition" stop-color="${palette.petalMain2}" />
+                                <stop offset="100%" class="stop-2 color-transition" stop-color="${palette.petalHighlight}" />
+                            </linearGradient>
+                            <linearGradient id="petalSide-${id}" x1="0%" y1="100%" x2="0%" y2="0%">
+                                <stop offset="0%" class="stop-1 color-transition" stop-color="${palette.petalMain1}" />
+                                <stop offset="100%" class="stop-2 color-transition" stop-color="${palette.petalHighlight}" />
+                            </linearGradient>
+                        </defs>
+
+                        <!-- Back Left Petal -->
+                        <path class="color-transition" d="M 35 60 C 20 40, 15 15, 30 10 C 45 5, 48 30, 50 50 Z" 
+                              fill="url(#petalSide-${id})" opacity="0.9" />
+
+                        <!-- Back Right Petal -->
+                        <path class="color-transition" d="M 65 60 C 80 40, 85 15, 70 10 C 55 5, 52 30, 50 50 Z" 
+                              fill="url(#petalSide-${id})" opacity="0.9" />
+
+                        <!-- Center Inner Petal -->
+                        <path class="color-transition" d="M 50 110 C 25 80, 20 35, 50 5 C 80 35, 75 80, 50 110 Z" 
+                              fill="url(#petalMain-${id})" />
+
+                        <!-- Front Left Petal -->
+                        <path class="color-transition" d="M 50 110 C 15 85, 10 40, 32 20 C 48 35, 48 75, 50 110 Z" 
+                              fill="url(#petalSide-${id})" />
+
+                        <!-- Front Right Petal -->
+                        <path class="color-transition" d="M 50 110 C 85 85, 90 40, 68 20 C 52 35, 52 75, 50 110 Z" 
+                              fill="url(#petalSide-${id})" />
+                    </svg>
+                </div>
+
+                <!-- Stem and Leaves -->
+                <div class="relative w-full flex justify-center -mt-3">
+                    <svg viewBox="0 0 60 160" class="w-16 h-40 sm:w-20 sm:h-48 md:w-24 md:h-56 overflow-visible">
+                        <!-- Stem -->
+                        <path d="M 30 0 Q 28 80 30 160" stroke="#15803d" stroke-width="7" fill="none" stroke-linecap="round" />
+                        <!-- Left Leaf -->
+                        <path d="M 28 120 C -12 95, -15 35, 26 65 C 20 85, 22 105, 28 120 Z" fill="#166534" />
+                        <!-- Right Leaf -->
+                        <path d="M 32 140 C 72 115, 75 55, 32 75 C 38 95, 36 115, 32 140 Z" fill="#15803d" />
+                    </svg>
+                </div>
+            `;
+
+            // Individual click transformation
+            wrapper.addEventListener('click', (e) => {
+                initAudio();
+                const currentPink = wrapper.dataset.pink === 'true';
+                transformSingleTulip(wrapper, !currentPink);
+                spawnSparkles(e.clientX, e.clientY, !currentPink);
+                playChimeSound(!currentPink);
+            });
+
+            return wrapper;
+        }
+
+        function transformSingleTulip(tulipElement, toPink) {
+            const id = tulipElement.dataset.id;
+            const targetPalette = toPink ? PINK_PALETTE : YELLOW_PALETTE;
+            tulipElement.dataset.pink = toPink ? 'true' : 'false';
+
+            const mainGrad = document.getElementById(`petalMain-${id}`);
+            const sideGrad = document.getElementById(`petalSide-${id}`);
+
+            if (mainGrad && sideGrad) {
+                const mainStops = mainGrad.querySelectorAll('stop');
+                const sideStops = sideGrad.querySelectorAll('stop');
+
+                mainStops[0].setAttribute('stop-color', targetPalette.petalMain2);
+                mainStops[1].setAttribute('stop-color', targetPalette.petalHighlight);
+
+                sideStops[0].setAttribute('stop-color', targetPalette.petalMain1);
+                sideStops[1].setAttribute('stop-color', targetPalette.petalHighlight);
+            }
+        }
+
+        function spawnSparkles(x, y, isPinkTheme) {
+            const particleCount = 22;
+            const color = isPinkTheme ? '#f472b6' : '#fde047';
+
+            for (let i = 0; i < particleCount; i++) {
+                const spark = document.createElement('div');
+                spark.className = 'sparkle-particle';
+                
+                const size = Math.random() * 8 + 4;
+                spark.style.width = `${size}px`;
+                spark.style.height = `${size}px`;
+                spark.style.backgroundColor = color;
+                spark.style.boxShadow = `0 0 12px ${color}`;
+                spark.style.left = `${x}px`;
+                spark.style.top = `${y}px`;
+
+                const angle = Math.random() * Math.PI * 2;
+                const dist = Math.random() * 110 + 20;
+                const dx = Math.cos(angle) * dist;
+                const dy = Math.sin(angle) * dist - 40;
+
+                spark.style.setProperty('--dx', `${dx}px`);
+                spark.style.setProperty('--dy', `${dy}px`);
+
+                document.body.appendChild(spark);
+                setTimeout(() => spark.remove(), 1800);
+            }
+
+            // Spawn romantic floating heart if pink
+            if (isPinkTheme) {
+                for (let i = 0; i < 4; i++) {
+                    const heart = document.createElement('i');
+                    heart.className = 'fa-solid fa-heart floating-heart text-pink-300 text-lg';
+                    heart.style.left = `${x}px`;
+                    heart.style.top = `${y}px`;
+
+                    const hdx = (Math.random() - 0.5) * 80;
+                    const hdy = -(Math.random() * 100 + 40);
+
+                    heart.style.setProperty('--hdx', `${hdx}px`);
+                    heart.style.setProperty('--hdy', `${hdy}px`);
+
+                    document.body.appendChild(heart);
+                    setTimeout(() => heart.remove(), 2200);
+                }
+            }
+        }
+
+        function buildTulipGarden() {
+            tulipField.innerHTML = '';
+            // Determine responsive number of tulips
+            const count = window.innerWidth < 640 ? 4 : (window.innerWidth < 1024 ? 5 : 7);
+
+            for (let i = 0; i < count; i++) {
+                const scale = 0.85 + Math.random() * 0.25;
+                const delay = Math.random() * 2;
+                const tulip = createTulipSVG(`garden-${i}`, scale, isPink, delay);
+                tulipField.appendChild(tulip);
+            }
+        }
+
+        const canvas = document.getElementById('grassCanvas');
+        const ctx = canvas.getContext('2d');
+        let blades = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight * 0.6;
+            initGrass();
+        }
+
+        class GrassBlade {
+            constructor(x) {
+                this.x = x;
+                this.height = Math.random() * 90 + 70;
+                this.maxOffset = Math.random() * 18 + 10;
+                this.speed = Math.random() * 0.02 + 0.012;
+                this.width = Math.random() * 4 + 2.5;
+                this.phase = Math.random() * Math.PI * 2;
+            }
+
+            draw(time) {
+                const swayOffset = Math.sin(time * this.speed + this.phase) * this.maxOffset;
+                ctx.beginPath();
+                ctx.moveTo(this.x, canvas.height);
+                ctx.quadraticCurveTo(
+                    this.x + swayOffset * 0.5, 
+                    canvas.height - this.height * 0.5, 
+                    this.x + swayOffset, 
+                    canvas.height - this.height
+                );
+                ctx.lineWidth = this.width;
+                ctx.strokeStyle = '#15803d';
+                ctx.lineCap = 'round';
+                ctx.stroke();
+            }
+        }
+
+        function initGrass() {
+            blades = [];
+            const density = canvas.width / 4;
+            for (let i = 0; i < density; i++) {
+                blades.push(new GrassBlade(Math.random() * canvas.width));
+            }
+        }
+
+        let animTime = 0;
+        function animateGrass() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            animTime += 1;
+            for (let blade of blades) {
+                blade.draw(animTime);
+            }
+            requestAnimationFrame(animateGrass);
+        }
+
+        transformBtn.addEventListener('click', () => {
+            initAudio();
+            isPink = !isPink;
+
+            // Trigger sound effect
+            playChimeSound(isPink);
+
+            // Animate tulips with staggered delay
+            const tulips = document.querySelectorAll('.tulip-wrapper');
+            tulips.forEach((tulip, index) => {
+                setTimeout(() => {
+                    transformSingleTulip(tulip, isPink);
+                    const rect = tulip.getBoundingClientRect();
+                    spawnSparkles(rect.left + rect.width / 2, rect.top + rect.height / 3, isPink);
+                }, index * 160);
+            });
+
+            // Update Fireflies color
+            createFireflies();
+
+            // Transform sky and text content
+            if (isPink) {
+                // Change to romantic pink aesthetic
+                skyBg.classList.remove('sky-night');
+                skyBg.classList.add('sky-pink-night');
+                
+                celestial.classList.remove('bg-amber-100/90', 'shadow-[0_0_70px_rgba(254,240,138,0.4)]');
+                celestial.classList.add('bg-pink-100/90', 'shadow-[0_0_80px_rgba(244,114,182,0.5)]');
+
+                subtitleBadge.textContent = '¡Sorpresa completa!';
+                subtitleBadge.classList.remove('text-amber-300/90');
+                subtitleBadge.classList.add('text-pink-300/90');
+
+                mainTitle.style.opacity = '0';
+                setTimeout(() => {
+                    mainTitle.textContent = '¡Sabía que tus favoritos son los Tulipanes Rosas!';
+                    mainTitle.classList.remove('text-amber-100');
+                    mainTitle.classList.add('text-pink-100');
+                    mainTitle.style.opacity = '1';
+                }, 350);
+
+                secondaryText.classList.remove('opacity-0', 'h-0', 'translate-y-3');
+                secondaryText.classList.add('opacity-100', 'h-auto', 'translate-y-0');
+
+                btnText.textContent = 'Volver al amarillo';
+                btnIcon.className = 'fa-solid fa-rotate-left text-white';
+                transformBtn.className = 'group relative px-7 py-3.5 rounded-full font-medium text-white bg-gradient-to-r from-pink-500 via-rose-500 to-pink-600 hover:from-pink-400 hover:to-rose-500 shadow-[0_0_25px_rgba(236,72,153,0.5)] active:scale-95 transition-all duration-300 flex items-center gap-3 cursor-pointer';
+
+            } else {
+                // Revert to original yellow aesthetic
+                skyBg.classList.remove('sky-pink-night');
+                skyBg.classList.add('sky-night');
+
+                celestial.classList.remove('bg-pink-100/90', 'shadow-[0_0_80px_rgba(244,114,182,0.5)]');
+                celestial.classList.add('bg-amber-100/90', 'shadow-[0_0_70px_rgba(254,240,138,0.4)]');
+
+                subtitleBadge.textContent = 'Una sorpresa para ti';
+                subtitleBadge.classList.remove('text-pink-300/90');
+                subtitleBadge.classList.add('text-amber-300/90');
+
+                mainTitle.style.opacity = '0';
+                setTimeout(() => {
+                    mainTitle.textContent = '¿De verdad pensaste que te regalaría tulipanes amarillos?';
+                    mainTitle.classList.remove('text-pink-100');
+                    mainTitle.classList.add('text-amber-100');
+                    mainTitle.style.opacity = '1';
+                }, 350);
+
+                secondaryText.classList.remove('opacity-100', 'h-auto', 'translate-y-0');
+                secondaryText.classList.add('opacity-0', 'h-0', 'translate-y-3');
+
+                btnText.textContent = 'Descúbrelo aquí';
+                btnIcon.className = 'fa-solid fa-wand-magic-sparkles text-slate-900 group-hover:rotate-12 transition-transform';
+                transformBtn.className = 'group relative px-7 py-3.5 rounded-full font-medium text-slate-950 bg-gradient-to-r from-amber-300 via-amber-400 to-yellow-500 hover:from-amber-200 hover:to-yellow-400 shadow-[0_0_25px_rgba(250,204,21,0.4)] active:scale-95 transition-all duration-300 flex items-center gap-3 cursor-pointer';
+            }
+        });
+
+        // Audio toggle handler
+        audioToggleBtn.addEventListener('click', () => {
+            initAudio();
+            audioEnabled = !audioEnabled;
+            if (audioEnabled) {
+                audioIcon.className = 'fa-solid fa-volume-high text-pink-300';
+                playChimeSound(isPink);
+            } else {
+                audioIcon.className = 'fa-solid fa-volume-xmark text-amber-200';
+            }
+        });
+
+        // Window resize event handler
+        window.addEventListener('resize', () => {
+            buildTulipGarden();
+            resizeCanvas();
+        });
+
+        // Initialize application on page load
+        window.onload = () => {
+            createStars();
+            createFireflies();
+            buildTulipGarden();
+            resizeCanvas();
+            animateGrass();
+        };
+    </script>
+</body>
+</html>
